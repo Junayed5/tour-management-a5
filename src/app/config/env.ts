@@ -6,10 +6,12 @@ interface IEnvConfig {
   PORT: string;
   MONGODB_URL: string;
   BCRYPT_SALT_ROUNDS: string;
+  JWT_SECRET: string
+  JWT_EXPIRES_IN: string
 }
 
 const loadEnvVars = (): IEnvConfig => {
-  const requireEnv: string[] = ["PORT", "MONGODB_URL", "BCRYPT_SALT_ROUNDS"];
+  const requireEnv: string[] = ["PORT", "MONGODB_URL", "BCRYPT_SALT_ROUNDS", "JWT_SECRET","JWT_EXPIRES_IN"];
 
   requireEnv.forEach((key) => {
     if (!process.env[key]) {
@@ -21,6 +23,8 @@ const loadEnvVars = (): IEnvConfig => {
     PORT: process.env.PORT as string,
     MONGODB_URL: process.env.MONGODB_URL as string,
     BCRYPT_SALT_ROUNDS: process.env.BCRYPT_SALT_ROUNDS as string,
+    JWT_SECRET: process.env.JWT_SECRET as string,
+    JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN as string,    
   }
 };
 

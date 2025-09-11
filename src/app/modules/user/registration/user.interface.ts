@@ -1,3 +1,5 @@
+import { Types } from "mongoose";
+
 export enum Role {
   ADMIN = "ADMIN",
   USER = "USER",
@@ -15,6 +17,7 @@ export interface Wallet {
   };
 
 export interface IUserWallet {
+  _id?: Types.ObjectId 
   name: string;
   phone: string;
   password: string;

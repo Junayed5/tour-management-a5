@@ -21,6 +21,6 @@ const createUserWallet = async(req:Request, res: Response, next: NextFunction) =
 }
 
 
-export const userController = {
+export const UserController = {
     createUserWallet
 }
