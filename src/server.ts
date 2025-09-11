@@ -1,17 +1,18 @@
 import {Server} from 'http'
 import mongoose from 'mongoose'
 import { app } from './app'
+import { envVars } from './app/config/env'
 
 let server: Server
 
 const startServer = async() => {
     try {
-        await mongoose.connect("mongodb+srv://mongo-juna:mongodb@cluster0.8ujknfb.mongodb.net/riding-management-backend?retryWrites=true&w=majority&appName=Cluster0")
+        await mongoose.connect(envVars.MONGODB_URL)
 
         console.log("connecting to db");
 
-        server = app.listen(5000, () => {
-            console.log("Server is listening 5000")
+        server = app.listen(envVars.PORT, () => {
+            console.log(`Server is listening ${envVars.PORT}`)
         })
     } catch (error) {
         console.log(error)
