@@ -6,7 +6,7 @@ export const routers = Router();
 
 const walletRouter = [
     {
-        path: "/user",
+        path: "/wallet",
         route: userRouter
     },
     {

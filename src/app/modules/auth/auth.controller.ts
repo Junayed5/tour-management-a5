@@ -19,6 +19,21 @@ const walletLogin = async (req: Request, res: Response, next: NextFunction) => {
   });
 };
 
+const logout = async (req: Request, res: Response, next: NextFunction) => {
+  res.clearCookie("accessToken", {
+    httpOnly:true,
+    secure:false,
+    sameSite: false
+  })
+
+  return res.status(200).json({
+    success: true,
+    message: "Logout Successfully",
+    user: null,
+  });
+}
+
 export const AuthUserWalletController = {
   walletLogin,
+  logout,
 };

@@ -19,6 +19,19 @@ const createUserWallet = async(payload: Partial<IUserWallet>) => {
     return newUserWallet
 }
 
+const getAllWallets = async() => {
+    const wallets = await UserWallet.find({});
+
+    const totalWallet = await UserWallet.countDocuments()
+
+    return {
+        data: wallets,
+        meta : {
+            total: totalWallet
+        }
+    }
+}
 export const userWalletService = {
-    createUserWallet
+    createUserWallet,
+    getAllWallets
 }

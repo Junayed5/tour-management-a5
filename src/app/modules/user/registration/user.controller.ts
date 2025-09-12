@@ -20,7 +20,25 @@ const createUserWallet = async(req:Request, res: Response, next: NextFunction) =
 
 }
 
+const getAllWallets = async(req:Request, res: Response, next: NextFunction) => {
+    const wallets = await userWalletService.getAllWallets();
+
+    if (!wallets) {
+        return res.status(404).json({
+            success: false,
+            message: "Wallet have wrong"
+        });
+    }
+
+    res.status(200).json({
+        success: true,
+        message: "User Wallet retrived successfully",
+        wallets
+    })
+}
+
 
 export const UserController = {
-    createUserWallet
+    createUserWallet,
+    getAllWallets
 }
