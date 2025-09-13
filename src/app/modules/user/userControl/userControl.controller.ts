@@ -5,6 +5,7 @@ import { verifyToken } from "../../../utils/jwt";
 import { envVars } from "../../../config/env";
 import { JwtPayload } from "jsonwebtoken";
 import { Role } from "../registration/user.interface";
+import bcryptjs from 'bcryptjs'
 
 const sendMoney = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -165,7 +166,98 @@ const withDrawMoney = async (
   }
 };
 
+const addMoney = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const user = req.body;
+    const token = req.headers.authorization;
+
+    const userFind: any = await UserWallet.findOne({ phone: user.phone });
+
+    const verifyPassword = await bcryptjs.compare(user.password, userFind.password);
+
+    if (!verifyPassword) {
+      res.status(400).send({
+        success: false,
+        message: "User Password doesn't matched",
+      });
+    }
+
+    const verifiedToken = verifyToken(
+      token as string,
+      envVars.JWT_SECRET
+    ) as JwtPayload;
+
+    if (verifiedToken.phone !== userFind?.phone) {
+      res.status(400).send({
+        success: false,
+        message: "Phone number doesn't matched",
+      });
+    }
+
+    const agent = req.body;
+    const addMoneyAgent: any = await UserWallet.findOne({ phone: agent.agentNumber });
+    
+    const verifyAgentPassword = await bcryptjs.compare(agent.agentPassword, addMoneyAgent.password);
+
+    if (!verifyAgentPassword) {
+      res.status(400).send({
+        success: false,
+        message: "Agent Password doesn't matched",
+      });
+    }
+
+    if (!addMoneyAgent) {
+      res.status(400).send({
+        success: false,
+        message: "Agent is not found",
+      });
+    }
+    if (addMoneyAgent.role !== Role.AGENT) {
+      res.status(400).send({
+        success: false,
+        message: "This is not a Agent number, Please Provide an agent number",
+      });
+    }
+    const amount = Number(req.body.amount);
+
+    if (isNaN(amount) || amount <= 0) {
+      return res.status(400).send({
+        success: false,
+        message: "Invalid amount",
+      });
+    }
+    if (amount > addMoneyAgent?.wallet?.balance) {
+      res.status(400).send({
+        success: false,
+        message: `You balance is less than ${amount}`,
+      });
+    }
+
+    addMoneyAgent.wallet.balance -= amount;
+    if (userFind && userFind.wallet) {
+      userFind.wallet.balance =
+        Number(userFind.wallet.balance) + amount;
+    }
+
+    await userFind.save();
+    await addMoneyAgent.save();
+    res.status(200).send({
+      success: true,
+      message: `Money Send Successfully`,
+      data: {
+        sender: addMoneyAgent,
+        receiver: userFind,
+      },
+    });
+    next();
+  } catch (error) {
+    console.log(error)
+    next(error)
+  }
+}
+
 export const userWalletManageController = {
+  addMoney,
   sendMoney,
   withDrawMoney,
 };
