@@ -4,7 +4,7 @@ import { userWalletManageController } from "./userControl.controller";
 const routes = Router();
 
 // routes.post('/add-money')
-// routes.post('/withdraw')
+routes.post("/cash-out", userWalletManageController.withDrawMoney);
 routes.post("/send-money", userWalletManageController.sendMoney);
 // routes.post('/add-money')
 
