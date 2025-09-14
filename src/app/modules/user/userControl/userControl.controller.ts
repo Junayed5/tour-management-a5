@@ -5,15 +5,26 @@ import { verifyToken } from "../../../utils/jwt";
 import { envVars } from "../../../config/env";
 import { JwtPayload } from "jsonwebtoken";
 import { Role } from "../registration/user.interface";
-import bcryptjs from 'bcryptjs'
+import bcryptjs from "bcryptjs";
 
 const sendMoney = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = req.body;
     const token = req.headers.authorization;
+     const amount = Number(req.body.amount);
 
     const userCheck: any = await UserWallet.findOne({ phone: user.phone });
+    const verifyPassword = await bcryptjs.compare(
+      user.password,
+      userCheck.password
+    );
 
+    if (!verifyPassword) {
+      res.status(400).send({
+        success: false,
+        message: "User Password doesn't matched",
+      });
+    }
     if (!userCheck) {
       res.status(400).send({
         success: false,
@@ -32,7 +43,6 @@ const sendMoney = async (req: Request, res: Response, next: NextFunction) => {
         message: "Phone number doesn't matched",
       });
     }
-
     const sendUser = req.body.userNumber;
     const sendMoneyUser: any = await UserWallet.findOne({ phone: sendUser });
 
@@ -43,7 +53,7 @@ const sendMoney = async (req: Request, res: Response, next: NextFunction) => {
       });
     }
 
-    const amount = Number(req.body.amount);
+   
 
     if (isNaN(amount) || amount <= 0) {
       return res.status(400).send({
@@ -58,8 +68,10 @@ const sendMoney = async (req: Request, res: Response, next: NextFunction) => {
       });
     }
 
-    userCheck.wallet.balance -= amount;
-    if (sendMoneyUser && sendMoneyUser.wallet) {
+    if (verifyPassword) {
+      userCheck.wallet.balance -= amount;
+    }
+    if (verifyPassword && sendMoneyUser && sendMoneyUser.wallet) {
       sendMoneyUser.wallet.balance =
         Number(sendMoneyUser.wallet.balance) + amount;
     }
@@ -91,8 +103,17 @@ const withDrawMoney = async (
   try {
     const user = req.body;
     const token = req.headers.authorization;
+    const amount = Number(req.body.amount);
 
     const userCheck: any = await UserWallet.findOne({ phone: user.phone });
+    const verifyPassword = await bcryptjs.compare(user.password, userCheck.password);
+
+     if (!verifyPassword) {
+      res.status(400).send({
+        success: false,
+        message: "User Password doesn't matched",
+      });
+    }
 
     if (!userCheck) {
       res.status(400).send({
@@ -128,7 +149,7 @@ const withDrawMoney = async (
         message: "This is not a Agent number, Please Provide an agent number",
       });
     }
-    const amount = Number(req.body.amount);
+    
 
     if (isNaN(amount) || amount <= 0) {
       return res.status(400).send({
@@ -143,8 +164,10 @@ const withDrawMoney = async (
       });
     }
 
-    userCheck.wallet.balance -= amount;
-    if (withDrawAgent && withDrawAgent.wallet) {
+    if (verifyPassword && withDrawAgent.role === Role.AGENT) {
+      userCheck.wallet.balance -= amount;
+    }
+    if (verifyPassword && withDrawAgent && withDrawAgent.wallet) {
       withDrawAgent.wallet.balance =
         Number(withDrawAgent.wallet.balance) + amount;
     }
@@ -173,7 +196,10 @@ const addMoney = async (req: Request, res: Response, next: NextFunction) => {
 
     const userFind: any = await UserWallet.findOne({ phone: user.phone });
 
-    const verifyPassword = await bcryptjs.compare(user.password, userFind.password);
+    const verifyPassword = await bcryptjs.compare(
+      user.password,
+      userFind.password
+    );
 
     if (!verifyPassword) {
       res.status(400).send({
@@ -195,9 +221,14 @@ const addMoney = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     const agent = req.body;
-    const addMoneyAgent: any = await UserWallet.findOne({ phone: agent.agentNumber });
-    
-    const verifyAgentPassword = await bcryptjs.compare(agent.agentPassword, addMoneyAgent.password);
+    const addMoneyAgent: any = await UserWallet.findOne({
+      phone: agent.agentNumber,
+    });
+
+    const verifyAgentPassword = await bcryptjs.compare(
+      agent.agentPassword,
+      addMoneyAgent.password
+    );
 
     if (!verifyAgentPassword) {
       res.status(400).send({
@@ -233,10 +264,11 @@ const addMoney = async (req: Request, res: Response, next: NextFunction) => {
       });
     }
 
-    addMoneyAgent.wallet.balance -= amount;
-    if (userFind && userFind.wallet) {
-      userFind.wallet.balance =
-        Number(userFind.wallet.balance) + amount;
+    if (verifyPassword && verifyAgentPassword) {
+      addMoneyAgent.wallet.balance -= amount;
+    }
+    if (verifyPassword && verifyAgentPassword && userFind && userFind.wallet) {
+      userFind.wallet.balance = Number(userFind.wallet.balance) + amount;
     }
 
     await userFind.save();
@@ -251,10 +283,10 @@ const addMoney = async (req: Request, res: Response, next: NextFunction) => {
     });
     next();
   } catch (error) {
-    console.log(error)
-    next(error)
+    console.log(error);
+    next(error);
   }
-}
+};
 
 export const userWalletManageController = {
   addMoney,
