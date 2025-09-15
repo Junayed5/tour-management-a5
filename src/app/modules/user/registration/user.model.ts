@@ -17,7 +17,7 @@ const registrationWalletSchema = new Schema<IUserWallet>(
     },
     isVerified: { type: Boolean, default: true },
     wallet: {
-      balance: { type: String, default: 50 },
+      balance: { type: String, default: 50, min: 0 },
     },
   },
   {

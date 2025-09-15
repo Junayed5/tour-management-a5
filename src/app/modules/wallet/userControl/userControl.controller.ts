@@ -6,6 +6,8 @@ import { envVars } from "../../../config/env";
 import { JwtPayload } from "jsonwebtoken";
 import { Role } from "../../user/registration/user.interface";
 import bcryptjs from "bcryptjs";
+import { transaction } from "../../transaction/transaction";
+import { TransactionType } from "../../transaction/transaction.interface";
 
 const sendMoney = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -78,6 +80,8 @@ const sendMoney = async (req: Request, res: Response, next: NextFunction) => {
 
     await userCheck.save();
     await sendMoneyUser.save();
+
+    await transaction(userCheck.phone, sendMoneyUser.phone, amount.toString(), TransactionType.SEND_MONEY);
     res.status(200).send({
       success: true,
       message: `Money Send Successfully`,
@@ -174,6 +178,7 @@ const withDrawMoney = async (
 
     await userCheck.save();
     await withDrawAgent.save();
+    await transaction(userCheck.phone, withDrawAgent.phone, amount.toString(), TransactionType.CASH_OUT);
     res.status(200).send({
       success: true,
       message: `Money Send Successfully`,

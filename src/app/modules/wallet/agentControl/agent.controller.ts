@@ -5,6 +5,8 @@ import bcryptjs from "bcryptjs";
 import { verifyToken } from "../../../utils/jwt";
 import { envVars } from "../../../config/env";
 import { JwtPayload } from "jsonwebtoken";
+import { transaction } from "../../transaction/transaction";
+import { TransactionType } from "../../transaction/transaction.interface";
 
 const cashIn = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -50,8 +52,7 @@ const cashIn = async (req: Request, res: Response, next: NextFunction) => {
       verifyPassword &&
       user?.role === Role.USER &&
       agentFind &&
-      agentFind.wallet &&
-      typeof agentFind.wallet.balance === "number"
+      agentFind.wallet
     ) {
       agentFind.wallet.balance -= amount;
     }
@@ -62,6 +63,14 @@ const cashIn = async (req: Request, res: Response, next: NextFunction) => {
 
     await agentFind.save();
     await user?.save();
+    if (user) {
+      await transaction(
+        agentFind.phone,
+        user.phone,
+        amount.toString(),
+        TransactionType.CASH_IN
+      );
+    }
 
     res.status(200).send({
       success: true,
@@ -143,7 +152,6 @@ const cashOut = async (req: Request, res: Response, next: NextFunction) => {
         message: "You have not available balance",
       });
     }
-    
 
     if (verifyAgentPassword && agent && agent.wallet) {
       agent.wallet.balance = (Number(agent.wallet.balance) + amount).toString();
@@ -164,7 +172,6 @@ const cashOut = async (req: Request, res: Response, next: NextFunction) => {
       },
     });
     next();
-
   } catch (error) {
     console.log(error);
     next(error);
