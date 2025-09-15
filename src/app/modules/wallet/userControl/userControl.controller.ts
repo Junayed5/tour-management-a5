@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import { UserWalletManage } from "./userControl.model";
-import { UserWallet } from "../registration/user.model";
+import { UserWallet } from "../../user/registration/user.model";
 import { verifyToken } from "../../../utils/jwt";
 import { envVars } from "../../../config/env";
 import { JwtPayload } from "jsonwebtoken";
-import { Role } from "../registration/user.interface";
+import { Role } from "../../user/registration/user.interface";
 import bcryptjs from "bcryptjs";
 
 const sendMoney = async (req: Request, res: Response, next: NextFunction) => {
