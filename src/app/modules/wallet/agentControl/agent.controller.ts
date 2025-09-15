@@ -148,7 +148,7 @@ const cashOut = async (req: Request, res: Response, next: NextFunction) => {
     if (verifyAgentPassword && agent && agent.wallet) {
       agent.wallet.balance = (Number(agent.wallet.balance) + amount).toString();
     }
-    if (verifyUserPassword && user?.role === Role.USER && user && user.wallet && typeof user.wallet.balance === "number") {
+    if (verifyUserPassword && user && user.wallet) {
       user.wallet.balance = (Number(user.wallet.balance) - amount).toString();
     }
 
