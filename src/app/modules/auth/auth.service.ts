@@ -19,7 +19,10 @@ const loginUserWallet = async (res: Response,payload: Partial<IUserWallet>) => {
   );
 
   if (!isPasswordMatch) {
-    throw new Error("Password is not matched, please try a valid password..");
+    return res.status(400).send({
+      success: false,
+      message: "Password is not matched, please try a valid password..",
+    });
   }
 
   // // token will be genareted
