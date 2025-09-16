@@ -6,6 +6,8 @@ const transactionSchema = new Schema<ITransaction>(
     senderNumber: { type: String, required: true },
     receiverNumber: { type: String, required: true },
     amount: { type: String, required: true },
+    fees: { type: String },
+    commission: { type: String },
     transactionType: {
       type: String,
       enum: Object.values(TransactionType),

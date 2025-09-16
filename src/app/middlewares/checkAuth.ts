@@ -21,24 +21,26 @@ export const checkAuth =
       });
 
       if (!isUserExist) {
-        throw new Error("User does not exist");
+        return res.status(400).send({
+          success: false,
+          message: "User doesn't exist",
+        });
       }
 
-      if (
-        isUserExist.isActive === IsActive.BLOCKED
-      ) {
-        throw new Error(
-          `User ${isUserExist.isActive}`
-        );
+      if (isUserExist.isActive === IsActive.BLOCKED) {
+        throw new Error(`User ${isUserExist.isActive}`);
       }
 
       if (!authRole.includes(verifiedToken.role)) {
-        throw new Error("You are not accessible to heat this route");
+        return res.status(400).send({
+          success: false,
+          message: "You are not accessible to heat this route",
+        });
       }
-    //   req.user = verifiedToken;
+      //   req.user = verifiedToken;
       next();
     } catch (error) {
-        console.log(error)
-        next(error)
+      console.log(error);
+      next(error);
     }
   };

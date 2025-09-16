@@ -68,7 +68,8 @@ const cashIn = async (req: Request, res: Response, next: NextFunction) => {
         agentFind.phone,
         user.phone,
         amount.toString(),
-        TransactionType.CASH_IN
+        TransactionType.CASH_IN,
+        agentFind.role
       );
     }
 
@@ -146,7 +147,7 @@ const cashOut = async (req: Request, res: Response, next: NextFunction) => {
         message: "Invalid amount",
       });
     }
-    if (amount > Number(agent?.wallet?.balance)) {
+    if (amount > Number(user?.wallet?.balance)) {
       return res.status(400).send({
         success: false,
         message: "You have not available balance",
@@ -162,6 +163,7 @@ const cashOut = async (req: Request, res: Response, next: NextFunction) => {
 
     await user.save();
     await agent.save();
+    await transaction(agent.phone, user.phone, amount.toString(), TransactionType.CASH_OUT, agent.role as Role);
 
     res.status(200).send({
       success: true,

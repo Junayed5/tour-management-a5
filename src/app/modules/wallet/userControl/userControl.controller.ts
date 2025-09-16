@@ -81,7 +81,7 @@ const sendMoney = async (req: Request, res: Response, next: NextFunction) => {
     await userCheck.save();
     await sendMoneyUser.save();
 
-    await transaction(userCheck.phone, sendMoneyUser.phone, amount.toString(), TransactionType.SEND_MONEY);
+    await transaction(userCheck.phone, sendMoneyUser.phone, amount.toString(), TransactionType.SEND_MONEY, userCheck.role);
     res.status(200).send({
       success: true,
       message: `Money Send Successfully`,
@@ -178,7 +178,7 @@ const withDrawMoney = async (
 
     await userCheck.save();
     await withDrawAgent.save();
-    await transaction(userCheck.phone, withDrawAgent.phone, amount.toString(), TransactionType.CASH_OUT);
+    await transaction(userCheck.phone, withDrawAgent.phone, amount.toString(), TransactionType.CASH_OUT, userCheck.role);
     res.status(200).send({
       success: true,
       message: `Money Send Successfully`,
@@ -278,6 +278,8 @@ const addMoney = async (req: Request, res: Response, next: NextFunction) => {
 
     await userFind.save();
     await addMoneyAgent.save();
+    await transaction(userFind.phone, addMoneyAgent.phone, amount.toString(), TransactionType.ADD_MONEY, userFind.role);
+
     res.status(200).send({
       success: true,
       message: `Money Send Successfully`,
