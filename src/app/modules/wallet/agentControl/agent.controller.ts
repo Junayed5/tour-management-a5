@@ -1,6 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import { UserWallet } from "../../user/registration/user.model";
-import { IUserWallet, Role } from "../../user/registration/user.interface";
+import {
+  IsActive,
+  IUserWallet,
+  Role,
+} from "../../user/registration/user.interface";
 import bcryptjs from "bcryptjs";
 import { verifyToken } from "../../../utils/jwt";
 import { envVars } from "../../../config/env";
@@ -163,7 +167,13 @@ const cashOut = async (req: Request, res: Response, next: NextFunction) => {
 
     await user.save();
     await agent.save();
-    await transaction(agent.phone, user.phone, amount.toString(), TransactionType.CASH_OUT, agent.role as Role);
+    await transaction(
+      agent.phone,
+      user.phone,
+      amount.toString(),
+      TransactionType.CASH_OUT,
+      agent.role as Role
+    );
 
     res.status(200).send({
       success: true,
@@ -180,7 +190,86 @@ const cashOut = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const activeAgentWallet = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const number = req.params.number;
+  const blockData = {
+    isActive: IsActive.ACTIVE,
+    isVerified: true,
+  };
+  const agentNumber = { phone: number };
+
+  const findNumber = await UserWallet.findOne(agentNumber);
+
+  if (findNumber?.role !== Role.AGENT) {
+    return res.status(400).send({
+      success: false,
+      message: "This is not a agent number",
+    });
+  }
+  if (findNumber === null) {
+    return res.status(404).send({
+      success: false,
+      message: "Phone number Not find",
+    });
+  }
+  const block = await UserWallet.findOneAndUpdate(agentNumber, blockData, {
+    new: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    message: "Agent Active successfully",
+    block,
+  });
+
+  next();
+};
+const blockAgentWallet = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const number = req.params.number;
+  const blockData = {
+    isActive: IsActive.BLOCKED,
+    isVerified: false,
+  };
+  const agentNumber = { phone: number };
+
+  const findNumber = await UserWallet.findOne(agentNumber);
+
+  if (findNumber?.role !== Role.AGENT) {
+    return res.status(400).send({
+      success: false,
+      message: "This is not a agent number",
+    });
+  }
+  if (findNumber === null) {
+    return res.status(400).send({
+      success: false,
+      message: "Phone number Not find",
+    });
+  }
+  const block = await UserWallet.findOneAndUpdate(agentNumber, blockData, {
+    new: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    message: "Agent Blocked successfully",
+    block,
+  });
+
+  next();
+};
+
 export const agentController = {
   cashIn,
   cashOut,
+  activeAgentWallet,
+  blockAgentWallet,
 };

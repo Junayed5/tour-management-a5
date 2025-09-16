@@ -18,4 +18,7 @@ router.get(
   UserController.getAllWallets
 );
 
+router.patch("/block/:number", checkAuth(Role.ADMIN), UserController.blockUserWallet);
+router.patch("/active/:number", checkAuth(Role.ADMIN), UserController.activeUserWallet);
+
 export const userRouter = router;

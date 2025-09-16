@@ -2,6 +2,7 @@ import {Server} from 'http'
 import mongoose from 'mongoose'
 import { app } from './app'
 import { envVars } from './app/config/env'
+import adminCreate from './app/utils/adminCreate'
 
 let server: Server
 
@@ -19,4 +20,5 @@ const startServer = async() => {
     }
 }
 
-startServer()
+startServer();
+adminCreate()
