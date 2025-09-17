@@ -5,26 +5,41 @@ import { Role } from "../user/registration/user.interface";
 import { verifyToken } from "../../utils/jwt";
 import { envVars } from "../../config/env";
 import { JwtPayload } from "jsonwebtoken";
+import { SortOrder } from "mongoose";
 
 const allTransaction = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const transactions = await Transaction.find();
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
+  const sortBy = req.query.sortBy as string || "createdAt";
+  const sortOrder = req.query.sortOrder === "desc" ? -1 : 1;
 
-  if (!transactions) {
-    return res.status(400).send({
-      success: false,
-      message: "Transaction load failed",
-      transactions,
-    });
-  }
+  const skip = (page - 1) * limit;
+
+  const sort: { [key: string]: SortOrder } = {};
+  sort[sortBy] = sortOrder;
+
+  // Fetch transactions with pagination and sorting
+  const transactions = await Transaction.find()
+    .sort(sort)
+    .skip(skip)
+    .limit(limit);
+
+  const total = await Transaction.countDocuments();
 
   res.status(200).send({
     success: true,
     message: "All Transaction Retrieved",
     transactions,
+    pagination: {
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    },
   });
 };
 
@@ -62,12 +77,31 @@ const userTransaction = async (
     });
   }
 
-  const transaction = await Transaction.find({senderNumber: number});
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
+  const sortBy = req.query.sortBy as string || "createdAt";
+  const sortOrder = req.query.sortOrder === "desc" ? -1 : 1;
+  const skip = (page - 1) * limit;
+  const sort: { [key: string]: SortOrder } = {};
+  sort[sortBy] = sortOrder;
 
-   res.status(200).send({
+  const transactions = await Transaction.find({ senderNumber: number })
+    .sort(sort)
+    .skip(skip)
+    .limit(limit);
+
+  const total = await Transaction.countDocuments({ senderNumber: number });
+
+  res.status(200).send({
     success: true,
     message: "Transaction got",
-    transaction
+    transactions,
+    pagination: {
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    },
   });
 };
 const agentTransaction = async (
@@ -104,12 +138,31 @@ const agentTransaction = async (
     });
   }
 
-  const transaction = await Transaction.find({senderNumber: number});
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
+  const sortBy = req.query.sortBy as string || "createdAt";
+  const sortOrder = req.query.sortOrder === "desc" ? -1 : 1;
+  const skip = (page - 1) * limit;
+  const sort: { [key: string]: SortOrder } = {};
+  sort[sortBy] = sortOrder;
 
-   res.status(200).send({
+  const transactions = await Transaction.find({ senderNumber: number })
+    .sort(sort)
+    .skip(skip)
+    .limit(limit);
+
+  const total = await Transaction.countDocuments({ senderNumber: number });
+
+  res.status(200).send({
     success: true,
     message: "Transaction got",
-    transaction
+    transactions,
+    pagination: {
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    },
   });
 };
 

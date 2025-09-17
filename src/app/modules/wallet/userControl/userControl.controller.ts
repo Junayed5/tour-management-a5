@@ -13,7 +13,7 @@ const sendMoney = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = req.body;
     const token = req.headers.authorization;
-     const amount = Number(req.body.amount);
+    const amount = Number(req.body.amount);
 
     const userCheck: any = await UserWallet.findOne({ phone: user.phone });
     const verifyPassword = await bcryptjs.compare(
@@ -53,9 +53,14 @@ const sendMoney = async (req: Request, res: Response, next: NextFunction) => {
         success: false,
         message: "Wallet is not found",
       });
-    }
+    };
 
-   
+    if (sendMoneyUser.role !== Role.USER) {
+      return res.status(400).send({
+        success: false,
+        message: "Send Money for User not others",
+      });
+    }
 
     if (isNaN(amount) || amount <= 0) {
       return res.status(400).send({
@@ -70,6 +75,23 @@ const sendMoney = async (req: Request, res: Response, next: NextFunction) => {
       });
     }
 
+    if (Number(userCheck.wallet.balance) - amount < 0) {
+      return res.status(400).send({
+        success: false,
+        message: "Insufficient balance. Cannot go below zero.",
+      });
+    }
+
+    if (
+      amount > Number(userCheck.wallet.balance) ||
+      Number(userCheck.wallet.balance) - amount < 0
+    ) {
+      return res.status(400).send({
+        success: false,
+        message: `Insufficient balance. Cannot go below zero.`,
+      });
+    }
+
     if (verifyPassword) {
       userCheck.wallet.balance -= amount;
     }
@@ -81,7 +103,13 @@ const sendMoney = async (req: Request, res: Response, next: NextFunction) => {
     await userCheck.save();
     await sendMoneyUser.save();
 
-    await transaction(userCheck.phone, sendMoneyUser.phone, amount.toString(), TransactionType.SEND_MONEY, userCheck.role);
+    await transaction(
+      userCheck.phone,
+      sendMoneyUser.phone,
+      amount.toString(),
+      TransactionType.SEND_MONEY,
+      userCheck.role
+    );
     res.status(200).send({
       success: true,
       message: `Money Send Successfully`,
@@ -110,9 +138,12 @@ const withDrawMoney = async (
     const amount = Number(req.body.amount);
 
     const userCheck: any = await UserWallet.findOne({ phone: user.phone });
-    const verifyPassword = await bcryptjs.compare(user.password, userCheck.password);
+    const verifyPassword = await bcryptjs.compare(
+      user.password,
+      userCheck.password
+    );
 
-     if (!verifyPassword) {
+    if (!verifyPassword) {
       res.status(400).send({
         success: false,
         message: "User Password doesn't matched",
@@ -153,7 +184,6 @@ const withDrawMoney = async (
         message: "This is not a Agent number, Please Provide an agent number",
       });
     }
-    
 
     if (isNaN(amount) || amount <= 0) {
       return res.status(400).send({
@@ -168,6 +198,23 @@ const withDrawMoney = async (
       });
     }
 
+    if (Number(userCheck.wallet.balance) - amount < 0) {
+      return res.status(400).send({
+        success: false,
+        message: "Insufficient balance. Cannot go below zero.",
+      });
+    }
+
+    if (
+      amount > Number(userCheck.wallet.balance) ||
+      Number(userCheck.wallet.balance) - amount < 0
+    ) {
+      return res.status(400).send({
+        success: false,
+        message: `Insufficient balance. Cannot go below zero.`,
+      });
+    }
+
     if (verifyPassword && withDrawAgent.role === Role.AGENT) {
       userCheck.wallet.balance -= amount;
     }
@@ -178,7 +225,13 @@ const withDrawMoney = async (
 
     await userCheck.save();
     await withDrawAgent.save();
-    await transaction(userCheck.phone, withDrawAgent.phone, amount.toString(), TransactionType.CASH_OUT, userCheck.role);
+    await transaction(
+      userCheck.phone,
+      withDrawAgent.phone,
+      amount.toString(),
+      TransactionType.CASH_OUT,
+      userCheck.role
+    );
     res.status(200).send({
       success: true,
       message: `Money Send Successfully`,
@@ -269,6 +322,23 @@ const addMoney = async (req: Request, res: Response, next: NextFunction) => {
       });
     }
 
+    if (Number(addMoneyAgent.wallet.balance) - amount < 0) {
+      return res.status(400).send({
+        success: false,
+        message: "Insufficient balance. Cannot go below zero.",
+      });
+    }
+
+    if (
+      amount > Number(addMoneyAgent.wallet.balance) ||
+      Number(addMoneyAgent.wallet.balance) - amount < 0
+    ) {
+      return res.status(400).send({
+        success: false,
+        message: `Insufficient balance. Cannot go below zero.`,
+      });
+    }
+
     if (verifyPassword && verifyAgentPassword) {
       addMoneyAgent.wallet.balance -= amount;
     }
@@ -278,7 +348,13 @@ const addMoney = async (req: Request, res: Response, next: NextFunction) => {
 
     await userFind.save();
     await addMoneyAgent.save();
-    await transaction(userFind.phone, addMoneyAgent.phone, amount.toString(), TransactionType.ADD_MONEY, userFind.role);
+    await transaction(
+      userFind.phone,
+      addMoneyAgent.phone,
+      amount.toString(),
+      TransactionType.ADD_MONEY,
+      userFind.role
+    );
 
     res.status(200).send({
       success: true,
