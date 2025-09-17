@@ -148,7 +148,7 @@ const cashOut = async (req: Request, res: Response, next: NextFunction) => {
       });
     }
 
-    if (verifiedToken.role !== Role.AGENT) {
+    if (verifiedToken.role !== Role.USER) {
       return res.status(400).send({
         success: false,
         message: "You are not a agent",

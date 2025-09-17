@@ -8,7 +8,8 @@ export const setCookies = (res: Response, tokenInfo: AuthToken) => {
   if (tokenInfo.accessToken) {
     res.cookie("accessToken", tokenInfo.accessToken, {
       httpOnly: true,
-      secure: false,
+      secure: true,
+      sameSite: "none"
     });
   }
 };
