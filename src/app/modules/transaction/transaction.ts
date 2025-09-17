@@ -1,6 +1,6 @@
 import validateRequest from "../../middlewares/validateRequest";
 import { Role } from "../user/registration/user.interface";
-import { TransactionType } from "./transaction.interface";
+import { TransactionStatus, TransactionType } from "./transaction.interface";
 import { Transaction } from "./transaction.model";
 import createTransactionZodSchema from "./transaction.validation";
 
@@ -20,6 +20,7 @@ export const transaction = async (
     senderNumber,
     receiverNumber,
     amount,
+    status: TransactionStatus.completed,
     transactionType,
     ...(role === Role.AGENT ? { commission } : { fees }),
   };

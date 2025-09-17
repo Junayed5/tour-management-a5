@@ -1,7 +1,7 @@
-This project is a Wallet Management System built with Express.js, Mongoose, and MongoDB as part of my backend assignment.
-I implemented it step by step, starting from project setup and finishing with advanced role-based transactions and admin features.
+## This project is a Wallet Management System built with Express.js, Mongoose, and MongoDB as part of my backend assignment.
+## I implemented it step by step, starting from project setup and finishing with advanced role-based transactions and admin features.
 
-🛠️ My Workflow (How I Built It)
+# 🛠️ My Workflow (How I Built It)
 1️⃣ Project Setup
 
 Started with Express.js project initialization.
