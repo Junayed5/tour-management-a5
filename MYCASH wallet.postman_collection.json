@@ -1,0 +1,466 @@
+{
+	"info": {
+		"_postman_id": "b9613ede-cb9c-493e-a53f-cb4dca8339be",
+		"name": "MYCASH wallet",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23151615"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "registration",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Junayed\",\r\n    \"phone\": \"01303718221\",\r\n    \"password\": \"JunaYed55#\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/v1/user/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"phone\": \"01303718221\",\r\n    \"password\": \"JunaYed55#\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/v1/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"phone\": \"01303718221\",\r\n    \"password\": \"JunaYed55#\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/v1/auth/logout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User transiction",
+			"item": [
+				{
+					"name": "Send Money",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGMyOGU5YzdhMWIzNjk4NjJlNmVhMGEiLCJwaG9uZSI6IjAxMzAzNzE4MjIxIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzU3Njk3Mjc1LCJleHAiOjE3NTc3ODM2NzV9.gmt_hQRFxLRXMeODAZ4z5XTe5fC1Um9kCqW-BpgL954",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"phone\": \"01303718221\",\r\n    \"password\" : \"JunaYed55#\",\r\n    \"amount\" : \"5\",\r\n    \"userNumber\" : \"01777044415\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/v1/user/send-money",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"send-money"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Withdrow agent",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGMyOGU5YzdhMWIzNjk4NjJlNmVhMGEiLCJwaG9uZSI6IjAxMzAzNzE4MjIxIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzU3NzQzMTcxLCJleHAiOjE3NTc4Mjk1NzF9.qcXIhp8DV5jXDP7_WpcpQzoh03yS6g4gTBniPGKbp7w",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"phone\": \"01303718221\",\r\n    \"password\" : \"JunaYed55#\",\r\n    \"amount\" : \"5\",\r\n    \"userNumber\" : \"01736006906\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/v1/user/cash-out",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"cash-out"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Money",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGMyOGU5YzdhMWIzNjk4NjJlNmVhMGEiLCJwaG9uZSI6IjAxMzAzNzE4MjIxIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzU3NzQzMTcxLCJleHAiOjE3NTc4Mjk1NzF9.qcXIhp8DV5jXDP7_WpcpQzoh03yS6g4gTBniPGKbp7w",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"phone\": \"01303718221\",\r\n    \"password\" : \"JunaYed55#\",\r\n    \"amount\" : \"5\",\r\n    \"agentNumber\" : \"01736006906\",\r\n    \"agentPassword\" : \"Agent123#\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/v1/user/add-money",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"add-money"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Agent Transiction",
+			"item": [
+				{
+					"name": "Cash in",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGMyOGU5YzdhMWIzNjk4NjJlNmVhMGEiLCJwaG9uZSI6IjAxMzAzNzE4MjIxIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzU3NzQzMTcxLCJleHAiOjE3NTc4Mjk1NzF9.qcXIhp8DV5jXDP7_WpcpQzoh03yS6g4gTBniPGKbp7w",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"phone\": \"01303718221\",\r\n    \"password\" : \"JunaYed55#\",\r\n    \"amount\" : \"5\",\r\n    \"userNumber\" : \"01736006906\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/v1/agent/cash-in",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"agent",
+								"cash-in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cash out",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGMyOGU5YzdhMWIzNjk4NjJlNmVhMGEiLCJwaG9uZSI6IjAxMzAzNzE4MjIxIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzU3NzQzMTcxLCJleHAiOjE3NTc4Mjk1NzF9.qcXIhp8DV5jXDP7_WpcpQzoh03yS6g4gTBniPGKbp7w",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"phone\": \"01303718221\",\r\n    \"password\" : \"JunaYed55#\",\r\n    \"amount\" : \"5\",\r\n    \"userNumber\" : \"01736006906\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/v1/agent/cash-in",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"agent",
+								"cash-in"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transactions",
+			"item": [
+				{
+					"name": "User transactions",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Agent transactions",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "get all wallet by admin",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGMyOGU5YzdhMWIzNjk4NjJlNmVhMGEiLCJwaG9uZSI6IjAxMzAzNzE4MjIxIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzU3NjU3MDQyLCJleHAiOjE3NTc3NDM0NDJ9.UOMG0U_WlykGBHSgh7YMGz47_6kIKpH4jV74w7kRXIQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/wallet/all-wallets",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"wallet",
+								"all-wallets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Transaction",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Block User",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGM5OTFhYjAxYWUyMTY3NWFmZWEyODYiLCJwaG9uZSI6IjAxNzEyMzQ1Njc4Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzU4MDQwODI1LCJleHAiOjE3NTgxMjcyMjV9.arlgXR91FauE6Gtdl-FxeQFPLigoexJi-2KgN7bV5HQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/wallet/block/01777044415",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"wallet",
+								"block",
+								"01777044415"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Active user",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGM5OTFhYjAxYWUyMTY3NWFmZWEyODYiLCJwaG9uZSI6IjAxNzEyMzQ1Njc4Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzU4MDQwODI1LCJleHAiOjE3NTgxMjcyMjV9.arlgXR91FauE6Gtdl-FxeQFPLigoexJi-2KgN7bV5HQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/wallet/block/01777044415",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"wallet",
+								"block",
+								"01777044415"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Active agent",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGM5OTFhYjAxYWUyMTY3NWFmZWEyODYiLCJwaG9uZSI6IjAxNzEyMzQ1Njc4Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzU4MDQwODI1LCJleHAiOjE3NTgxMjcyMjV9.arlgXR91FauE6Gtdl-FxeQFPLigoexJi-2KgN7bV5HQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/wallet/block/01777044415",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"wallet",
+								"block",
+								"01777044415"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Block agent",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGM5OTFhYjAxYWUyMTY3NWFmZWEyODYiLCJwaG9uZSI6IjAxNzEyMzQ1Njc4Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzU4MDQwODI1LCJleHAiOjE3NTgxMjcyMjV9.arlgXR91FauE6Gtdl-FxeQFPLigoexJi-2KgN7bV5HQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/wallet/block/01777044415",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"wallet",
+								"block",
+								"01777044415"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
